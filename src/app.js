@@ -16,6 +16,7 @@ import {
   Switch,
   Route
 } from "react-router-dom";
+import MyFavoriteBooks from './myFavoriteBooks';
 
 
 class App extends React.Component {
@@ -25,19 +26,26 @@ class App extends React.Component {
     return(
       <>
         <Router>
-          <IsLoadingAndError>
+          {/* <IsLoadingAndError> */}
             <Header />
               <Switch>
                 <Route exact path="/">
                   {/* TODO: if the user is logged in, render the `MyFavoriteBooks` component, if they are not, render the `Login` component */}
+{this.props.auth0.isAuthenticated ? < MyFavoriteBooks/> : <login/>}
                 </Route>
+                
                 {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+                <Route exact path="/profile">
+                <Profile />
+                </Route>
               </Switch>
+              
               <LoginButton />
+              
+
               <LogoutButton />
-              <Profile />
             <Footer />
-          </IsLoadingAndError>
+          {/* </IsLoadingAndError> */}
         </Router>
       </>
     )
