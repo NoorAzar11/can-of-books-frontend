@@ -1,11 +1,15 @@
 import React from 'react';
 import { withAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Carousel from 'react-bootstrap/Carousel';
+// import Carousel from 'react-bootstrap/Carousel';
 const axios = require('axios');
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 let serverURL = process.env.REACT_APP_SERVER;
-let serverURLBook = '${serverURL}/books?email${this.props.auth0.user.email}';
+let serverURLBook = '${serverURL}/books?';
 
 class BestBooks extends React.Component {
     constructor(props) {
@@ -49,16 +53,6 @@ class BestBooks extends React.Component {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
