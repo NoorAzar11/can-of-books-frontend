@@ -1,11 +1,15 @@
 import React from 'react';
 import { withAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Carousel from 'react-bootstrap/Carousel';
+// import Carousel from 'react-bootstrap/Carousel';
 const axios = require('axios');
+import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
-let serverURL = process.env.REACT_APP_SERVER;
-let serverURLBook = '${serverURL}/books?email${this.props.auth0.user.email}';
+// let serverURL = process.env.REACT_APP_SERVER;
+// let serverURLBook = '${serverURL}/books?';
 
 class BestBooks extends React.Component {
     constructor(props) {
@@ -13,17 +17,71 @@ class BestBooks extends React.Component {
         this.state = {
             storebookData: [],
             email: '',
+            displayBooks: true,
+            displayModel:false,
+            server:process.env.REACT_APP_SERVER,
+            name:'',
+            img:'',
+            description:'',
+            status:''
 
         }
     }
 
     componentDidMount = async () => {
-        let bookFront = await axios.get(`{this.state.serverURl}/books, { params : ${this.props.auth0.user.email}}`);
+        const {user}=this.props.auth0;
+        let bookFront = await axios.get(`{this.state.server}/books`, { params :{email:user.email}} );
         
         this.setState({
             bookFront: bookFront.data,
+            displayBooks:true,
         });
     }
+
+    handleCloseForm= () => {
+        this.setState({
+            displayModel:false
+        })
+    }
+    handleShowForm= () =>{
+        this.setState({displayModel:true})
+    }
+
+    handleupdateNameNB=(event)=> {
+this.setState({
+    name:event.target.value
+})
+    }
+    handleUpdatedescription=(event)=> {
+        this.setState({
+            description:event.target.value
+        })
+    }
+    handleUpdateURL=(event) =>
+    {
+        this.setState({
+            img:event.target.value
+        })
+    }
+    handleUpdateStatus=(event) => {
+        this.setState({
+            status:event.target.value
+        })
+    }
+
+    getBook=async(event) =>
+    {
+        event.preventDefault();
+        const BookDataForm = {
+            email:this.props.user.email,
+            name:this.state.name,
+            description:this.state.description,
+            img:this.state.img,
+            status:this.state.status,
+        }
+    }
+
+
     render() {
         return (
             <div>
@@ -49,16 +107,6 @@ class BestBooks extends React.Component {
     }
 
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
