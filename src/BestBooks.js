@@ -1,12 +1,13 @@
 import React from 'react';
 import { withAuth0 } from '@auth0/auth0-react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import Carousel from 'react-bootstrap/Carousel';
-const axios = require('axios');
-import Card from 'react-bootstrap/Card';
+import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+// import Carousel from 'react-bootstrap/Carousel';
+const axios = require('axios');
+
 
 // let serverURL = process.env.REACT_APP_SERVER;
 // let serverURLBook = '${serverURL}/books?';
@@ -79,36 +80,89 @@ this.setState({
             img:this.state.img,
             status:this.state.status,
         }
+        const newBook=await axios.post(`${this.state.server}/addBook`,BookDataForm)
+this.setState({
+    bookFront: newBook.data 
+})
+    }
+    deleteHandler=async(index)=>{
+        const email={
+            email: this.props.auth0.user.email,
+        }
+
+        let newBook=await axios.delete(`${this.state.server}/deleteBook/${index}`,{params:email})
+this.setState({
+    bookFront: newBook.data 
+})
     }
 
 
     render() {
         return (
-            <div>
-                <Carousel>
-                {this.state.bookFront.map((item) => (
-                    <Carousel.Item>
-                       
-                        <img
-                            className="d-block w-100"
-                            src={item.status}
-                            alt="First slide"
-                        />
-                        <Carousel.Caption>
-                            <h3>{item.name}</h3>
-                            <p>{item.description}</p>
-                        </Carousel.Caption>
-                    </Carousel.Item>
-                ))
-    }
-                </Carousel>
-            </div>
+            <>
+            
+            <Button variant="primary" onClick={this.handleShowForm}>Add New Books</Button>
+            <Modal show={this.state.displayModel} onHide={this.handleCloseForm}>
+        <Modal.Header closeButton>
+          <Modal.Title>Book Form</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>Woohoo,
+
+        <Form onSubmit={(event)=>this.getBook(event)}>
+  <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Label>Book Name :</Form.Label>
+    <Form.Control onChange={(event)=>this.handleupdateNameNB(event)} type="text" placeholder="Books" />
+  </Form.Group>
+
+
+  <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Label>Book Description :</Form.Label>
+    <Form.Control onChange={(event)=>this.handleUpdatedescription(event)} type="text" placeholder="Books Description " />
+  </Form.Group>
+ 
+
+  <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Label>Book Status :</Form.Label>
+    <Form.Control onChange={(event)=>this.handleUpdateStatus(event)} type="text" placeholder="Books Status " />
+  </Form.Group>
+
+  <Form.Group className="mb-3" controlId="formBasicEmail">
+    <Form.Label>Book Images:</Form.Label>
+    <Form.Control onChange={(event)=>this.handleUpdateURL(event)} type="text" placeholder="Books Images " />
+  </Form.Group>
+  <Button variant="primary" onClick={this.handleShowForm}>Submit</Button>
+  </Form>
+        </Modal.Body>
+
+              </Modal> 
+
+  {this.state.storebookData.length!==0 &&
+    this.state.storebookData.map((item,idx) => {
+        return (
+            <Card key={idx} style={{ width: '18rem' }}>
+  <Card.Img variant="top" src="{item.img}" />
+  <Card.Body>
+    <Card.Title>{item.name}</Card.Title>
+    <Card.Text>
+     <h3>{item.name}</h3>
+     <p>Book Description : {item.description} </p>
+     <p> Book Status:{item.status}</p>
+    </Card.Text>
+    <Button onClick={()=> this.deleteHandler(idx)} variant="primary">Delete Books</Button>
+  </Card.Body>
+</Card>
         )
-    }
+
+    })
+}
+           
+</>     
+    )
 
 }
 
-
+}
 
 export default withAuth0(BestBooks);
 
