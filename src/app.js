@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './header';
-import IsLoadingAndError from './IsLoadingAndError';
+// import IsLoadingAndError from './IsLoadingAndError';
 import Footer from './footer';
 
 import { withAuth0 } from '@auth0/auth0-react'; 
